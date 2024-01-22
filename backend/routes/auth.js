@@ -4,10 +4,11 @@ const User = require("../models/User");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
+var fetchuser = require('../middleware/fetchuser');
 
 const JWT_SECRET = "Harryisagoodb$oy";
 
-//create a user using: POST "/api/auth/createuser". Doesn't require Auth
+//create a doctor using: POST 
 
 router.post(
   "/createuser",
@@ -102,6 +103,19 @@ router.post(
       }
    })
 
+
+// get details of logged in user
+router.post("/getuser",  fetchuser,  async (req, res) => {
+
+try{
+  userId = req.user.id;
+  const user = await User.findById(userId).select("-password");
+  res.send(user);
+}catch(error) {
+  console.error(error.message);
+  res.status(500).send("Internal server error");
+}
+  })
 
 
 module.exports = router;
