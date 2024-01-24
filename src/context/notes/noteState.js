@@ -39,6 +39,8 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ title, description, tag }),
     });
+    const json = response.json();
+    console.log(json);
 
     console.log("adding a new note");
     const note = {
@@ -50,13 +52,23 @@ const NoteState = (props) => {
       date: "2024-01-22T09:08:40.960Z",
       __v: 0,
     };
-    // If you are not using setNotes outside this function, you can remove this line
-    // setNotes(notes.concat(note));
+    setNotes(notes.concat(note));
   };
 
   // Delete a Note
-  const deleteNote = (id) => {
+  const deleteNote =async (id) => {
     // todo api call
+    const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjVhY2JhYTdhNTNhMmE4MGU5MDNlYWM1In0sImlhdCI6MTcwNTkwODIxOX0.3P5Y5mbuLeCG08n0wylKzlUGGFrhS74oVuTsdD3T5t0",
+      },
+    });
+    const json = response.json();
+    console.log(json);
+
 
     console.log("deleting the node with id" + id);
     const newNotes = notes.filter((note) => {
@@ -80,6 +92,7 @@ const NoteState = (props) => {
       body: JSON.stringify({ title, description, tag }),
     });
     const json = response.json();
+    console.log(json);
 
     // logic to edit
     for (let index = 0; index < notes.length; index++) {
