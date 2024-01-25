@@ -21,7 +21,6 @@ const NoteState = (props) => {
       },
     });
     const json = await response.json();
-    console.log(json);
     setNotes(json);
   };
 
@@ -57,11 +56,8 @@ const NoteState = (props) => {
       },
     });
     const json = response.json();
-    console.log(json);
 
-
-    console.log("deleting the node with id" + id);
-    const newNotes = notes.filter((note) => {
+   const newNotes = notes.filter((note) => {
       return note._id !== id;
     });
     // If you are not using setNotes outside this function, you can remove this line
@@ -82,7 +78,6 @@ const NoteState = (props) => {
       body: JSON.stringify({ title, description, tag }),
     });
     const json = await response.json();
-    console.log(json);
 
     let newNotes = JSON.parse(JSON.stringify(notes))
 
