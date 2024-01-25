@@ -8,7 +8,7 @@ var fetchuser = require('../middleware/fetchuser');
 
 const JWT_SECRET = "Harryisagoodb$oy";
 
-//create a doctor using: POST 
+//create a user using: POST 
 
 router.post(
   "/createuser",
@@ -20,9 +20,10 @@ router.post(
     }),
   ],
   async (req, res) => {
+    let success = false;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({success, errors: errors.array() });
     }
     //check whether the user exists with the same email already
 
@@ -31,7 +32,7 @@ router.post(
       if (user) {
         return res
           .status(400)
-          .json({ error: "Sorry a user with this email already exists" });
+          .json({ success, error: "Sorry a user with this email already exists" });
       }
 
       const salt = await bcrypt.genSalt(10); //await because this fxn genSalt returns promise and waits till value gets transferred into const salt.
@@ -51,7 +52,8 @@ router.post(
       }
       const authToken = jwt.sign(data, JWT_SECRET);
 
-      res.json({authToken})
+      success = true;
+      res.json({success, authToken})
       // res.json(user);
 
     } catch (error) {
