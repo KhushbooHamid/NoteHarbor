@@ -2,12 +2,23 @@ import noteContext from "../context/notes/noteContext";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import NoteItem from "./NoteItem";
 import AddNote from "./AddNote";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 const Notes = (props) => {
   const context = useContext(noteContext);
-  const { notes, getNotes, editNote } = context;
+  let navigate = useNavigate();
+
+  const { notes, getNotes, editNote, pinNote} = context;
   useEffect(() => {
-    getNotes();
+    if(localStorage.getItem('token')){
+      getNotes();
+    }
+    else{
+      navigate("/login");
+
+    }
     // eslint-disable-next-line
   }, []);
 
@@ -40,12 +51,40 @@ const Notes = (props) => {
   const handleClick = (e) => {
     editNote(note.id, note.etitle, note.edescription, note.etag);
     refClose.current.click();
-    props.showAlert("Updated successfully", "success");
+    // props.showAlert("Updated successfully", "success");
   };
 
   const onChange = (e) => {
     setNote({ ...note, [e.target.name]: e.target.value }); //spread operator so that the new properties gets added
   };
+
+  // `````````````````````````````````````````````
+
+  const handlePin = async (noteId) => {
+    console.log('Calling pinNote with noteId:', noteId);
+    
+    try {
+      const response = await pinNote(noteId);
+      
+      if (response.ok) {
+        const updatedNote = await response.json();
+        console.log('Response from pinNote endpoint:', updatedNote);
+        // Update the state with the updated note as needed
+      } else {
+        console.error('Invalid response from pinNote endpoint:', response);
+        // Handle the response as an error (e.g., show an error message to the user)
+      }
+    } catch (error) {
+      console.error('Error pinning/unpinning note:', error);
+      // Handle the error (e.g., show an error message to the user)
+    }
+  };
+  
+  
+  
+  
+
+
 
   // `````````````````````````````````````````````
   const totalPages = Math.ceil(notes.length / notesPerPage);
@@ -180,6 +219,8 @@ const Notes = (props) => {
               updateNote={updateNote}
               showAlert={props.showAlert}
               note={note}
+              handlePin={handlePin}
+              pinNote={pinNote}
             />
           );
         })}
@@ -191,13 +232,13 @@ const Notes = (props) => {
  <ul className="pagination">
         {pageNumbers.map((number) => (
           <li key={number} className="page-item">
-            <a
+            <Link
               onClick={() => paginate(number)}
               className={`page-link ${currentPage === number ? 'active' : ''}`}
-              href="#"
+              to="/"
             >
               {number}
-            </a>
+            </Link>
           </li>
         ))}
       </ul>

@@ -56,6 +56,7 @@ const NoteState = (props) => {
       },
     });
     const json = response.json();
+    console.log(json);
 
    const newNotes = notes.filter((note) => {
       return note._id !== id;
@@ -78,6 +79,8 @@ const NoteState = (props) => {
       body: JSON.stringify({ title, description, tag }),
     });
     const json = await response.json();
+    console.log(json);
+
 
     let newNotes = JSON.parse(JSON.stringify(notes))
 
@@ -95,9 +98,36 @@ const NoteState = (props) => {
     setNotes(newNotes);
   };
 
+  const pinNote = async (id) => {
+    try {
+      const response = await fetch(`${host}/api/notes/pinnote/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token":  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjVhY2JhYTdhNTNhMmE4MGU5MDNlYWM1In0sImlhdCI6MTcwNTkwODIxOX0.3P5Y5mbuLeCG08n0wylKzlUGGFrhS74oVuTsdD3T5t0",
+        },
+      });
+  
+      console.log('Response from pinNote endpoint:', response);
+  
+      if (response.ok) {
+        // If the response status is within the 2xx range, consider it a success
+        const updatedNote = await response.json();
+        return updatedNote;
+      } 
+      throw new Error(`Failed to pin/unpin note. Status: ${response.status}`);
+
+    } catch (error) {
+      console.error("Error pinning/unpinning note:", error);
+      
+    }
+  };
+  
+
+
   return (
     <NoteContext.Provider
-      value={{ notes, addNote, deleteNote, editNote, getNotes }}
+      value={{ notes, addNote, deleteNote, editNote, getNotes, pinNote }}
     >
       {props.children}
     </NoteContext.Provider>

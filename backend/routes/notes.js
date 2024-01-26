@@ -98,4 +98,37 @@ try {
 }
 })
 
+
+
+//Route 5: Pin/Unpin a Note using PUT. Login required
+router.put('/pinnote/:id', fetchuser, async (req, res) => {
+  try {
+    // Find the note by ID
+    let note = await Note.findById(req.params.id);
+
+    // Check if the note exists
+    if (!note) {
+      return res.status(404).send("Not Found");
+    }
+
+    // Check if the user owns the note
+    if (note.user.toString() !== req.user.id) {
+      return res.status(401).send("Not Allowed");
+    }
+
+    // Toggle the pinned status
+    note.pinned = !note.pinned;
+
+    // Save the updated note
+    const updatedNote = await note.save();
+
+    res.json(updatedNote);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal server error");
+  }
+});
+
+module.exports = router;
+
 module.exports = router;

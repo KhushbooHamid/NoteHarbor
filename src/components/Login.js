@@ -49,6 +49,7 @@ const Login = (props) => {
       style={{ marginTop: "-10vh", position: "relative" }}
     >
       <h1 className="mb-4">NoteHarbor</h1>
+      <h2 className="mb-4">Login to continue</h2>
       <form onSubmit={handleSubmit} style={loginFormStyle}>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">

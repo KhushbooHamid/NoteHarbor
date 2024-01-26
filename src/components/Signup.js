@@ -55,6 +55,7 @@ const Signup = (props) => {
   return (
     <div className="container d-flex flex-column align-items-center justify-content-center vh-100" style={{ marginTop: "-10vh", position: "relative" }}>
       <h1 className="mb-4">NoteHarbor</h1>
+      <h2 className="mb-4">Create an account to continue</h2>
       <form onSubmit={handleSubmit} style={signupFormStyle}>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
