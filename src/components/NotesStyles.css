@@ -1,0 +1,29 @@
+/* NotesStyles.css */
+
+/* Styles for Home component */
+.container-home {
+    max-width: 800px;
+    margin: auto;
+  }
+  
+  h2-home {
+    color: #007bff; /* Blue color similar to Bootstrap primary color */
+    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+    font-weight: bold;
+  }
+  
+  /* Additional styles for Home component */
+  .container-home p {
+    font-size: 1.2rem;
+    color: #555;
+  }
+  
+  /* Styles for Notes component */
+  .container-notes {
+    max-width: 800px;
+    margin: auto;
+  }
+  
+  /* Add more styles as needed for the Notes component */
+  

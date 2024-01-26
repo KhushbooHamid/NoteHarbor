@@ -17,7 +17,7 @@ const AddNote = (props) => {
     setNote({ title: "",
     description: "",
     tag: "",})
-    props.showAlert("Added successfully", "success");
+    // props.showAlert("Added successfully", "success");
   };
 
   const onChange = (e) => {
@@ -26,9 +26,8 @@ const AddNote = (props) => {
 
   return (
     <div className="container my-3">
-      <h1>Add a Note</h1>
-      <div className="container my-3">
-        <form>
+      
+      <form onSubmit={handleClick}>
           <div className="mb-3">
             <label htmlFor="title " className="form-label">
               Title
@@ -84,7 +83,6 @@ const AddNote = (props) => {
             Add Note
           </button>
         </form>
-      </div>
     </div>
   );
 };
