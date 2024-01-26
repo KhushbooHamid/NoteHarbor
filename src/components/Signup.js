@@ -1,20 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Signup = (props) => {
-  const [credentials, setCredentials] = useState({name: "", email: "", password: "", cpassword: "" });
+  const [credentials, setCredentials] = useState({
+    name: "",
+    email: "",
+    password: "",
+    cpassword: "",
+  });
   let navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const {name, email, password} = credentials;
+    const { name, email, password } = credentials;
 
     const response = await fetch("http://localhost:5000/api/auth/createuser", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({name, email, password}),
+      body: JSON.stringify({ name, email, password }),
     });
 
     const json = await response.json();
@@ -25,18 +30,32 @@ const Signup = (props) => {
       //save the auth token and redirect
       localStorage.setItem("token", json.authtoken);
       navigate("/");
-      props.showAlert("Account Created Successfully", "success")
+      props.showAlert("Account Created Successfully", "success");
     } else {
-      props.showAlert("Invalid Credentials", "danger")
+      props.showAlert("Invalid Credentials", "danger");
     }
   };
 
   const onChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value }); //spread operator so that the new properties gets added
   };
+
+
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    
+    // Cleanup function to remove overflow:hidden on component unmount
+    return () => {
+      document.body.style.overflow = 'visible';
+    };
+  }, []);
+
+
   return (
-    <div className="container">
-      <form onSubmit={handleSubmit}>
+    <div className="container d-flex flex-column align-items-center justify-content-center vh-100" style={{ marginTop: "-10vh", position: "relative" }}>
+      <h1 className="mb-4">NoteHarbor</h1>
+      <form onSubmit={handleSubmit} style={signupFormStyle}>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
             Name
@@ -77,7 +96,7 @@ const Signup = (props) => {
             id="password"
             name="password"
             onChange={onChange}
-            required 
+            required
             minLength={5}
           />
         </div>
@@ -91,17 +110,27 @@ const Signup = (props) => {
             id="cpassword"
             name="cpassword"
             onChange={onChange}
-            required 
+            required
             minLength={5}
           />
         </div>
-
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
+        <div className="text-center">
+          <button type="submit" className="btn btn-primary">
+            Sign up
+          </button>
+        </div>
       </form>
     </div>
   );
+};
+
+const signupFormStyle = {
+  maxWidth: "400px",
+  width: "100%",
+  padding: "20px",
+  border: "1px solid #ccc",
+  borderRadius: "8px",
+  boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
 };
 
 export default Signup;
